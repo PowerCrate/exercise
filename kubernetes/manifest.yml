@@ -1,0 +1,64 @@
+# docker manifest syntax version 2.0.0
+
+image: powercrate/webserver:v1
+
+manifests:
+  - image: powercrate/webserver:amd64
+    platform:
+      architecture: amd64
+      os: linux
+    digest: sha256:...
+  - image: powercrate/webserver:arm64
+    platform:
+      architecture: arm64
+      os: linux
+    digest: sha256:...
+
+config:
+  # Environment variables for the web server
+  env:
+    - SERVER_NAME=example.com
+    - SERVER_ROOT=/var/www/html
+  # Environment variables for the proxy server
+    - VIRTUAL_HOST=example.com
+    - LETSENCRYPT_HOST=example.com
+    - LETSENCRYPT_EMAIL=youremail@example.com
+
+annotations:
+  # Labels for the web server image
+  com.example.webserver.version: v1
+  com.example.webserver.description: A simple web server
+  # Labels for the proxy server image
+  com.example.proxy.version: latest
+  com.example.proxy.description: A reverse proxy server
+
+# Platform-specific configuration for the web server
+platform:
+  architecture: amd64
+  os: linux
+  # The web server image is compatible with both amd64 and arm64 architectures
+  os.version: 10.0.19042
+
+# Platform-specific configuration for the proxy server
+platform:
+  architecture: amd64
+  os: linux
+  # The proxy server image is only compatible with the amd64 architecture
+  os.version: 10.0.19042
+
+# Image definitions
+# Web server image
+images:
+  - image: powercrate/webserver:v1
+    platform:
+      architecture: amd64
+      os: linux
+    digest: sha256:...
+
+# Proxy server image
+images:
+  - image: jwilder/nginx-proxy:latest
+    platform:
+      architecture: amd64
+      os: linux
+    digest: sha256:...
